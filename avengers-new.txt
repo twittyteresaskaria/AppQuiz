@@ -1,0 +1,2 @@
+Note: Replace avengers.png with the new Avengers image file.
+The image from the attachment should be uploaded as avengers.png in the GitHub repo.
