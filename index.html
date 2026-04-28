@@ -129,14 +129,7 @@
             display: inline-block;
         }
         .btn-secondary:hover { background: #e32; color: white; }
-        .see-wall-link {
-            display: block;
-            margin-top: 16px;
-            font-size: 14px;
-            color: #aaa;
-            cursor: pointer;
-            text-decoration: underline;
-        }
+        .see-wall-link { display: none; }
         .see-wall-link:hover { color: #e32; }
 
         /* ── PROFILE ── */
@@ -464,7 +457,6 @@
 <div class="birthday-banner">🎉 &nbsp; Discover Your Roshanger identity! &nbsp; 🎉</div>
 <div class="buzzfeed-header">
     Roshangers Quiz
-    <button class="wall-nav-btn" onclick="goToWall()">🏆 Results Wall</button>
 </div>
 <div class="progress-container">
     <div class="progress-bar" id="progressBar"></div>
@@ -478,7 +470,6 @@
         <h1>Which Roshanger Are You?</h1>
         <p>Discover your Roshanger side! Answer 9 questions to find out.</p>
         <button class="btn-primary" onclick="goToProfile()">Let's Go!</button>
-        <span class="see-wall-link" onclick="goToWall()">See everyone's results →</span>
     </div>
 
     <!-- PROFILE -->
@@ -519,13 +510,13 @@
         </div>
         <div class="save-status" id="saveStatus">Saving your result...</div>
         <div class="result-actions">
-            <button class="btn-primary" onclick="goToWall()">🏆 See Everyone's Results</button>
             <button class="btn-secondary" onclick="retake()">Retake Quiz</button>
         </div>
     </div>
 
     <!-- WALL -->
-    <div class="wall-screen" id="wallScreen">
+    <div class="wall-screen" id="wallScreen" style="display: none;">
+
         <div class="wall-header">
             <div class="result-badge">Roshangers Wall of Fame</div>
             <h2>The Roshangers Squad 🏆</h2>
