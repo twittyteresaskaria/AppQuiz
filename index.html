@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Which Roshan Are You?</title>
+    <title>Which Roshanger Are You?</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -216,7 +216,7 @@
         }
         .answers-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 12px;
         }
         .answer-card {
@@ -463,7 +463,7 @@
 
 <div class="birthday-banner">🎉 &nbsp; Discover Your Coding Spirit! &nbsp; 🎉</div>
 <div class="buzzfeed-header">
-    BuzzFeed Quiz
+    Roshangers Quiz
     <button class="wall-nav-btn" onclick="goToWall()">🏆 Results Wall</button>
 </div>
 <div class="progress-container">
@@ -474,9 +474,9 @@
 
     <!-- INTRO -->
     <div class="intro-screen fade-in" id="introScreen">
-        <img src="roshan pic.png" alt="Roshan" class="hero-image" />
-        <h1>Which Roshan Are You?</h1>
-        <p>Discover which side of Roshan matches your vibe! Answer 9 questions to find out.</p>
+        <img src="roshan pic.png" alt="Avengers landing image" class="hero-image" />
+        <h1>Which Roshanger Are You?</h1>
+        <p>Discover your Roshanger side! Answer 9 questions to find out.</p>
         <button class="btn-primary" onclick="goToProfile()">Let's Go!</button>
         <span class="see-wall-link" onclick="goToWall()">See everyone's results →</span>
     </div>
@@ -484,7 +484,7 @@
     <!-- PROFILE -->
     <div class="profile-screen" id="profileScreen">
         <h2>First — who are you? 👀</h2>
-        <p>Your name and photo will show up on the results wall</p>
+        <p>Your name and photo will show up on the Roshangers wall</p>
 
         <div class="photo-upload-area" id="photoUploadArea" onclick="document.getElementById('photoInput').click()">
             <span class="photo-placeholder">📷</span>
@@ -509,7 +509,7 @@
 
     <!-- RESULT -->
     <div class="result-screen" id="resultScreen">
-        <div class="result-badge">Your Result</div>
+        <div class="result-badge">Your Roshanger Result</div>
         <span class="result-emoji" id="resultEmoji"></span>
         <div class="result-you-got">You got...</div>
         <div class="result-name" id="resultName"></div>
@@ -527,9 +527,9 @@
     <!-- WALL -->
     <div class="wall-screen" id="wallScreen">
         <div class="wall-header">
-            <div class="result-badge">Roshan Wall of Fame</div>
-            <h2>The Roshan Squad 🏆</h2>
-            <p>Here's which Roshan everyone got</p>
+            <div class="result-badge">Roshangers Wall of Fame</div>
+            <h2>The Roshangers Squad 🏆</h2>
+            <p>Here's which Roshanger everyone got</p>
         </div>
         <div id="firebaseNotice"></div>
         <div class="wall-grid" id="wallGrid">
@@ -594,6 +594,13 @@ const AVATARS = [
         description: "You're often... occupied. Bathroom breaks are frequent, and you have a knack for disappearing at key moments. It's just part of your routine!",
         traits: ["Private", "Unpredictable", "Nature-caller"]
     }
+];
+
+const SAMPLE_RESULTS = [
+    { name: "Ayesha", avatarName: "Fashion Icon Roshan", avatarEmoji: "👔", traits: ["Trendy", "Creative", "Outfit-obsessed"] },
+    { name: "Sam", avatarName: "Fun-loving Roshan", avatarEmoji: "😂", traits: ["Humorous", "Social", "Jovial"] },
+    { name: "Mina", avatarName: "Relaxed Roshan", avatarEmoji: "😴", traits: ["Chill", "Procrastinator", "Easygoing"] },
+    { name: "Leo", avatarName: "Beard Master Roshan", avatarEmoji: "🧔", traits: ["Groomed", "Stylish", "Detail-oriented"] }
 ];
 
 const QUESTIONS = [
@@ -946,10 +953,10 @@ async function renderWall() {
         notice.innerHTML = `
             <div class="setup-notice">
                 <strong>⚙️ Firebase not configured yet.</strong><br>
-                To enable the results wall, fill in your Firebase config in the script section of <code>index.html</code>.
-                Create a free project at <strong>console.firebase.google.com</strong>, enable Firestore + Storage in test mode, then paste your config.
+                Sample Roshangers results are shown here while you set up Firestore.
+                To enable the live wall, paste your Firebase config in the script section of <code>index.html</code>.
             </div>`;
-        grid.innerHTML = '<div class="wall-empty">Results will appear here once Firebase is set up 🔧</div>';
+        renderWallCards(SAMPLE_RESULTS);
         return;
     }
 
@@ -965,7 +972,12 @@ async function renderWall() {
     }
 
     if (!results || results.length === 0) {
-        grid.innerHTML = '<div class="wall-empty">No results yet — be the first! 🎉</div>';
+        notice.innerHTML = `
+            <div class="setup-notice">
+                <strong>✨ No live results yet.</strong><br>
+                Sample Roshangers results are shown while the first players submit their answers.
+            </div>`;
+        renderWallCards(SAMPLE_RESULTS);
         return;
     }
 
@@ -987,6 +999,27 @@ async function renderWall() {
                 ${(r.traits || []).map(t => `<span class="trait-chip">${escapeHTML(t)}</span>`).join('')}
             </div>
             ${isMe ? `<button class="delete-btn" onclick="deleteResult('${r.id}')">↺ Redo mine</button>` : ''}`;
+        grid.appendChild(card);
+    });
+}
+
+function renderWallCards(results) {
+    const grid = document.getElementById('wallGrid');
+    grid.innerHTML = '';
+    results.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'wall-card';
+        const photoHTML = r.photoData
+            ? `<img src="${r.photoData}" alt="${escapeHTML(r.name)}" />`
+            : r.avatarEmoji;
+
+        card.innerHTML = `
+            <div class="wall-photo">${photoHTML}</div>
+            <div class="wall-person-name">${escapeHTML(r.name)}</div>
+            <div class="wall-avatar-name">${r.avatarEmoji} ${r.avatarName}</div>
+            <div class="traits-row">
+                ${(r.traits || []).map(t => `<span class="trait-chip">${escapeHTML(t)}</span>`).join('')}
+            </div>`;
         grid.appendChild(card);
     });
 }
