@@ -33,7 +33,7 @@
         }
 
         .buzzfeed-header {
-            background: #e32;
+            background: #4d96ff;
             color: white;
             padding: 12px 20px;
             font-size: 26px;
@@ -48,7 +48,7 @@
             font-size: 12px;
             font-weight: 800;
             background: white;
-            color: #e32;
+            color: #4d96ff;
             border: none;
             padding: 6px 14px;
             border-radius: 3px;
@@ -62,7 +62,7 @@
         .progress-container { background: #ddd; height: 5px; width: 100%; }
         .progress-bar {
             height: 5px;
-            background: #e32;
+            background: #4d96ff;
             transition: width 0.5s ease;
             width: 0%;
         }
@@ -100,7 +100,7 @@
             margin-right: auto;
         }
         .btn-primary {
-            background: #e32;
+            background: #4d96ff;
             color: white;
             border: none;
             padding: 16px 52px;
@@ -113,11 +113,11 @@
             transition: transform 0.1s, background 0.2s;
             display: inline-block;
         }
-        .btn-primary:hover { background: #c00; transform: scale(1.03); }
+        .btn-primary:hover { background: #0066cc; transform: scale(1.03); }
         .btn-secondary {
             background: white;
-            color: #e32;
-            border: 3px solid #e32;
+            color: #4d96ff;
+            border: 3px solid #4d96ff;
             padding: 13px 36px;
             font-size: 15px;
             font-weight: 900;
@@ -128,7 +128,7 @@
             transition: all 0.2s;
             display: inline-block;
         }
-        .btn-secondary:hover { background: #e32; color: white; }
+        .btn-secondary:hover { background: #4d96ff; color: white; }
         .see-wall-link { display: none; }
         .see-wall-link:hover { color: #e32; }
 
@@ -162,8 +162,8 @@
             justify-content: center;
             flex-direction: column;
         }
-        .photo-upload-area:hover { border-color: #e32; background: #fff5f5; }
-        .photo-upload-area.has-photo { border-style: solid; border-color: #e32; }
+        .photo-upload-area:hover { border-color: #4d96ff; background: #fff5f5; }
+        .photo-upload-area.has-photo { border-style: solid; border-color: #4d96ff; }
         .photo-placeholder { font-size: 28px; color: #bbb; pointer-events: none; }
         .photo-label { font-size: 11px; color: #bbb; font-weight: 700; margin-top: 4px; pointer-events: none; }
         #photoPreview {
@@ -187,7 +187,7 @@
             transition: border-color 0.2s;
             color: #111;
         }
-        .name-wrap input:focus { border-color: #e32; }
+        .name-wrap input:focus { border-color: #4d96ff; }
         .name-wrap input::placeholder { color: #ccc; font-weight: 400; }
 
         /* ── QUIZ ── */
@@ -226,14 +226,14 @@
             transition: all 0.15s ease;
         }
         .answer-card:hover {
-            border-color: #e32;
+            border-color: #4d96ff;
             background: #fff5f5;
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(238,51,34,0.12);
         }
         .answer-card.selected {
-            background: #e32 !important;
-            border-color: #e32 !important;
+            background: #4d96ff !important;
+            border-color: #4d96ff !important;
             color: white !important;
             transform: scale(0.98);
         }
@@ -243,7 +243,7 @@
         .result-screen { display: none; text-align: center; }
         .result-badge {
             display: inline-block;
-            background: #e32;
+            background: #4d96ff;
             color: white;
             font-size: 11px;
             font-weight: 800;
@@ -274,7 +274,7 @@
             border-radius: 12px;
             padding: 28px 32px;
             text-align: left;
-            border-left: 6px solid #e32;
+            border-left: 6px solid #4d96ff;
             margin-bottom: 28px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.07);
         }
@@ -295,7 +295,7 @@
             min-height: 22px;
         }
         .save-status.saved { color: #6bcb77; font-weight: 700; }
-        .save-status.error { color: #e32; }
+        .save-status.error { color: #4d96ff; }
         .result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
         /* ── WALL ── */
@@ -325,11 +325,11 @@
             transition: transform 0.15s;
         }
         .wall-card:hover { transform: translateY(-3px); }
-        .wall-card.mine { border-color: #e32; }
+        .wall-card.mine { border-color: #4d96ff; }
         .wall-card.mine::after {
             content: "You!";
             display: inline-block;
-            background: #e32;
+            background: #4d96ff;
             color: white;
             font-size: 10px;
             font-weight: 800;
@@ -368,7 +368,7 @@
         .wall-avatar-name {
             font-size: 13px;
             font-weight: 700;
-            color: #e32;
+            color: #4d96ff;
             margin-bottom: 10px;
         }
         .wall-card .traits-row { justify-content: center; }
@@ -385,7 +385,7 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .delete-btn:hover { border-color: #e32; color: #e32; }
+        .delete-btn:hover { border-color: #4d96ff; color: #4d96ff; }
 
         .wall-empty {
             text-align: center;
@@ -475,7 +475,7 @@
     <!-- PROFILE -->
     <div class="profile-screen" id="profileScreen">
         <h2>First — who are you? 👀</h2>
-        <p>Your name and photo will show up on the Roshangers wall</p>
+        <p></p>
 
         <div class="photo-upload-area" id="photoUploadArea" onclick="document.getElementById('photoInput').click()">
             <span class="photo-placeholder">📷</span>
@@ -683,6 +683,16 @@ const QUESTIONS = [
             { text: "Sleeping through half the journey.", avatar: 2 },
             { text: "Taking selfies at every stop for maximum bragging rights.", avatar: 3 },
             { text: "Coming back and telling his cousins he planned the whole adventure.", avatar: 3 }
+        ]
+    },
+    {
+        text: "Why did Roshan really leave Fenway Stadium just one hour into the baseball game?",
+        options: [
+            { text: "“There was a pillar blocking my view!” (Totally believable…)", avatar: 2 },
+            { text: "He needed to check if his beard was still on point in the restroom mirror.", avatar: 0 },
+            { text: "He was secretly Googling “What is a home run?” and got overwhelmed.", avatar: 3 },
+            { text: "He thought the seventh-inning stretch happened after the first inning.", avatar: 2 },
+            { text: "He realized he’d rather eat Middle Eastern food than try to understand baseball rules.", avatar: 0 }
         ]
     }
 ];
@@ -1043,7 +1053,7 @@ function escapeHTML(str) {
 function launchConfetti() {
     const wrap = document.getElementById('confettiWrap');
     wrap.innerHTML = '';
-    const colors = ['#e32','#ffd93d','#6bcb77','#4d96ff','#ff6b6b','#c77dff','#ff9f1c','#06d6a0'];
+    const colors = ['#87ceeb','#ffd93d','#6bcb77','#4d96ff','#ff6b6b','#c77dff','#ff9f1c','#06d6a0'];
     for (let i = 0; i < 100; i++) {
         const el = document.createElement('div');
         el.className = 'dot';
