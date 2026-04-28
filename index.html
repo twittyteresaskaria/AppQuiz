@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Which Roshan Are You?</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .birthday-banner {
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #c77dff);
+            background-size: 300% 100%;
+            animation: gradientShift 4s ease infinite;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .buzzfeed-header {
+            background: #e32;
+            color: white;
+            padding: 12px 20px;
+            font-size: 26px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .wall-nav-btn {
+            font-size: 12px;
+            font-weight: 800;
+            background: white;
+            color: #e32;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 3px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+        .wall-nav-btn:hover { background: #ffe0de; }
+
+        .progress-container { background: #ddd; height: 5px; width: 100%; }
+        .progress-bar {
+            height: 5px;
+            background: #e32;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* ── INTRO ── */
+        .intro-screen { text-align: center; }
+        .hero-image {
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px;
+            display: block;
+            margin: 0 auto 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        }
+        .intro-screen h1 {
+            font-size: 38px;
+            font-weight: 900;
+            color: #111;
+            line-height: 1.1;
+            margin-bottom: 14px;
+        }
+        .intro-screen p {
+            font-size: 17px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .btn-primary {
+            background: #e32;
+            color: white;
+            border: none;
+            padding: 16px 52px;
+            font-size: 18px;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            transition: transform 0.1s, background 0.2s;
+            display: inline-block;
+        }
+        .btn-primary:hover { background: #c00; transform: scale(1.03); }
+        .btn-secondary {
+            background: white;
+            color: #e32;
+            border: 3px solid #e32;
+            padding: 13px 36px;
+            font-size: 15px;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        .btn-secondary:hover { background: #e32; color: white; }
+        .see-wall-link {
+            display: block;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #aaa;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .see-wall-link:hover { color: #e32; }
+
+        /* ── PROFILE ── */
+        .profile-screen { display: none; text-align: center; }
+        .profile-screen h2 {
+            font-size: 30px;
+            font-weight: 900;
+            color: #111;
+            margin-bottom: 8px;
+        }
+        .profile-screen > p {
+            font-size: 16px;
+            color: #777;
+            margin-bottom: 32px;
+        }
+
+        .photo-upload-area {
+            margin: 0 auto 28px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px dashed #ddd;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            background: #f9f9f9;
+            transition: border-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .photo-upload-area:hover { border-color: #e32; background: #fff5f5; }
+        .photo-upload-area.has-photo { border-style: solid; border-color: #e32; }
+        .photo-placeholder { font-size: 28px; color: #bbb; pointer-events: none; }
+        .photo-label { font-size: 11px; color: #bbb; font-weight: 700; margin-top: 4px; pointer-events: none; }
+        #photoPreview {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .name-wrap { margin-bottom: 28px; }
+        .name-wrap input {
+            width: 100%;
+            max-width: 360px;
+            padding: 14px 20px;
+            font-size: 20px;
+            font-weight: 700;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s;
+            color: #111;
+        }
+        .name-wrap input:focus { border-color: #e32; }
+        .name-wrap input::placeholder { color: #ccc; font-weight: 400; }
+
+        /* ── QUIZ ── */
+        .quiz-screen { display: none; }
+        .question-meta {
+            font-size: 12px;
+            font-weight: 700;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .question-text {
+            font-size: 28px;
+            font-weight: 900;
+            color: #111;
+            line-height: 1.3;
+            margin-bottom: 28px;
+        }
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .answer-card {
+            background: white;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 16px 18px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            text-align: left;
+            line-height: 1.4;
+            transition: all 0.15s ease;
+        }
+        .answer-card:hover {
+            border-color: #e32;
+            background: #fff5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(238,51,34,0.12);
+        }
+        .answer-card.selected {
+            background: #e32 !important;
+            border-color: #e32 !important;
+            color: white !important;
+            transform: scale(0.98);
+        }
+        .answer-card.dimmed { opacity: 0.4; pointer-events: none; }
+
+        /* ── RESULT ── */
+        .result-screen { display: none; text-align: center; }
+        .result-badge {
+            display: inline-block;
+            background: #e32;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 5px 14px;
+            border-radius: 2px;
+            margin-bottom: 24px;
+        }
+        .result-emoji { font-size: 88px; display: block; margin-bottom: 12px; }
+        .result-you-got {
+            font-size: 13px;
+            font-weight: 700;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+        .result-name {
+            font-size: 46px;
+            font-weight: 900;
+            color: #111;
+            line-height: 1.05;
+            margin-bottom: 12px;
+        }
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            padding: 28px 32px;
+            text-align: left;
+            border-left: 6px solid #e32;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+        }
+        .result-description { font-size: 18px; color: #444; line-height: 1.75; margin-bottom: 20px; }
+        .traits-row { display: flex; flex-wrap: wrap; gap: 8px; }
+        .trait-chip {
+            background: #f0f0f0;
+            color: #333;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 7px 16px;
+            border-radius: 20px;
+        }
+        .save-status {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 20px;
+            min-height: 22px;
+        }
+        .save-status.saved { color: #6bcb77; font-weight: 700; }
+        .save-status.error { color: #e32; }
+        .result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+        /* ── WALL ── */
+        .wall-screen { display: none; }
+        .wall-header { text-align: center; margin-bottom: 32px; }
+        .wall-header h2 {
+            font-size: 36px;
+            font-weight: 900;
+            color: #111;
+            margin-bottom: 8px;
+        }
+        .wall-header p { font-size: 16px; color: #777; }
+
+        .wall-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .wall-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            border: 2px solid transparent;
+            transition: transform 0.15s;
+        }
+        .wall-card:hover { transform: translateY(-3px); }
+        .wall-card.mine { border-color: #e32; }
+        .wall-card.mine::after {
+            content: "You!";
+            display: inline-block;
+            background: #e32;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .wall-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            background: #f0f0f0;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            overflow: hidden;
+        }
+        .wall-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .wall-person-name {
+            font-size: 16px;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 4px;
+        }
+        .wall-avatar-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #e32;
+            margin-bottom: 10px;
+        }
+        .wall-card .traits-row { justify-content: center; }
+        .wall-card .trait-chip { font-size: 11px; padding: 4px 10px; }
+        .delete-btn {
+            margin-top: 12px;
+            background: none;
+            border: 1.5px solid #ddd;
+            color: #aaa;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .delete-btn:hover { border-color: #e32; color: #e32; }
+
+        .wall-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #bbb;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .wall-loading {
+            text-align: center;
+            padding: 40px;
+            color: #bbb;
+            font-size: 16px;
+        }
+        .wall-actions { text-align: center; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+        /* ── SETUP NOTICE ── */
+        .setup-notice {
+            background: #fff8e1;
+            border: 2px solid #ffd93d;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #555;
+            text-align: left;
+            line-height: 1.6;
+        }
+        .setup-notice strong { color: #111; }
+        .setup-notice code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        /* ── SHARED ── */
+        .fade-in { animation: fadeUp 0.35s ease forwards; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .confetti-wrap {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 0;
+            pointer-events: none; z-index: 9999; overflow: visible;
+        }
+        .dot { position: absolute; top: -12px; animation: fall linear forwards; }
+        @keyframes fall {
+            to { transform: translateY(105vh) rotate(800deg); opacity: 0; }
+        }
+
+        @media (max-width: 520px) {
+            .answers-grid { grid-template-columns: 1fr; }
+            .question-text { font-size: 22px; }
+            .intro-screen h1 { font-size: 28px; }
+            .result-name { font-size: 32px; }
+            .wall-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 360px) {
+            .wall-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="birthday-banner">🎉 &nbsp; Discover Your Coding Spirit! &nbsp; 🎉</div>
+<div class="buzzfeed-header">
+    BuzzFeed Quiz
+    <button class="wall-nav-btn" onclick="goToWall()">🏆 Results Wall</button>
+</div>
+<div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="container">
+
+    <!-- INTRO -->
+    <div class="intro-screen fade-in" id="introScreen">
+        <img src="roshan.jpg" alt="Roshan" class="hero-image" />
+        <h1>Which Roshan Are You?</h1>
+        <p>Discover which side of Roshan matches your vibe! Answer 9 questions to find out.</p>
+        <button class="btn-primary" onclick="goToProfile()">Let's Go!</button>
+        <span class="see-wall-link" onclick="goToWall()">See everyone's results →</span>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="profile-screen" id="profileScreen">
+        <h2>First — who are you? 👀</h2>
+        <p>Your name and photo will show up on the results wall</p>
+
+        <div class="photo-upload-area" id="photoUploadArea" onclick="document.getElementById('photoInput').click()">
+            <span class="photo-placeholder">📷</span>
+            <span class="photo-label">Add photo</span>
+            <img id="photoPreview" alt="Your photo" />
+        </div>
+        <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)" />
+
+        <div class="name-wrap">
+            <input type="text" id="nameInput" placeholder="Your name" maxlength="30" />
+        </div>
+
+        <button class="btn-primary" onclick="beginQuiz()">Start Quiz →</button>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz-screen" id="quizScreen">
+        <div class="question-meta" id="questionMeta">Question 1 of 8</div>
+        <div class="question-text" id="questionText"></div>
+        <div class="answers-grid" id="answersGrid"></div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-screen" id="resultScreen">
+        <div class="result-badge">Your Result</div>
+        <span class="result-emoji" id="resultEmoji"></span>
+        <div class="result-you-got">You got...</div>
+        <div class="result-name" id="resultName"></div>
+        <div class="result-card">
+            <p class="result-description" id="resultDesc"></p>
+            <div class="traits-row" id="resultTraits"></div>
+        </div>
+        <div class="save-status" id="saveStatus">Saving your result...</div>
+        <div class="result-actions">
+            <button class="btn-primary" onclick="goToWall()">🏆 See Everyone's Results</button>
+            <button class="btn-secondary" onclick="retake()">Retake Quiz</button>
+        </div>
+    </div>
+
+    <!-- WALL -->
+    <div class="wall-screen" id="wallScreen">
+        <div class="wall-header">
+            <div class="result-badge">Roshan Wall of Fame</div>
+            <h2>The Roshan Squad 🏆</h2>
+            <p>Here's which Roshan everyone got</p>
+        </div>
+        <div id="firebaseNotice"></div>
+        <div class="wall-grid" id="wallGrid">
+            <div class="wall-loading">Loading results...</div>
+        </div>
+        <div class="wall-actions">
+            <button class="btn-primary" onclick="goToProfile()">Take the Quiz</button>
+            <button class="btn-secondary" onclick="goToIntro()">← Back</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="confetti-wrap" id="confettiWrap"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  FIREBASE CONFIG
+//  1. Go to https://console.firebase.google.com
+//  2. Create a project → Add a web app → copy config here
+//  3. Enable Firestore (Build → Firestore Database → Start in test mode)
+// ═══════════════════════════════════════════════════════════════
+const FIREBASE_CONFIG = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "your-project.firebaseapp.com",
+    projectId: "your-project",
+    storageBucket: "your-project.firebasestorage.app",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef"
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════════════
+const AVATARS = [
+    {
+        name: "Beard Master Roshan", emoji: "🧔",
+        description: "You're all about that perfect beard! Grooming is your zen, and you take pride in looking sharp. Whether it's oils or trims, your facial hair is your signature.",
+        traits: ["Groomed", "Stylish", "Detail-oriented"]
+    },
+    {
+        name: "Fashion Icon Roshan", emoji: "👔",
+        description: "Fashion comes first! You love trying on outfits, critiquing designs, and making sure you look impeccable. Style is your superpower.",
+        traits: ["Trendy", "Creative", "Outfit-obsessed"]
+    },
+    {
+        name: "Relaxed Roshan", emoji: "😴",
+        description: "Why rush? You're the king of taking it easy. Sleeping in, delaying plans, and enjoying the moment are your jam. Life's too short not to relax.",
+        traits: ["Chill", "Procrastinator", "Easygoing"]
+    },
+    {
+        name: "Fun-loving Roshan", emoji: "😂",
+        description: "Laughter is your language! You tell jokes, make people smile, and keep the energy high. Whether at work or play, you're the life of the party.",
+        traits: ["Humorous", "Social", "Jovial"]
+    },
+    {
+        name: "Mysterious Roshan", emoji: "🚽",
+        description: "You're often... occupied. Bathroom breaks are frequent, and you have a knack for disappearing at key moments. It's just part of your routine!",
+        traits: ["Private", "Unpredictable", "Nature-caller"]
+    }
+];
+
+const QUESTIONS = [
+    {
+        text: "It’s time to leave home for a party. What is Roshan most likely doing?",
+        options: [
+            { text: "Still in the bathroom perfecting his beard.", avatar: 0 },
+            { text: "Trying on his third shirt – fashion first!", avatar: 1 },
+            { text: "Asking, \"Do we really have to go?\"", avatar: 2 },
+            { text: "Searching for his shoes (again).", avatar: 3 },
+            { text: "In the bathroom \"call of nature\"", avatar: 4 }
+        ]
+    },
+    {
+        text: "Roshan is at a fancy restaurant. What’s he most excited about?",
+        options: [
+            { text: "Checking if they serve Middle Eastern food.", avatar: 0 },
+            { text: "Critiquing the interior design like a civil engineer.", avatar: 1 },
+            { text: "Asking the waiter, \"Does this have coconut?\"", avatar: 2 },
+            { text: "Taking a selfie to show off his outfit.", avatar: 3 },
+            { text: "Pretending to understand the wine menu.", avatar: 4 }
+        ]
+    },
+    {
+        text: "What’s Roshan’s approach to a new project at work?",
+        options: [
+            { text: "Planning every detail… but starting last minute.", avatar: 2 },
+            { text: "Making sure his beard looks sharp for Zoom calls.", avatar: 0 },
+            { text: "Asking, \"Can we schedule this for the morning?\"", avatar: 2 },
+            { text: "Telling his team a joke before getting serious.", avatar: 3 },
+            { text: "In the bathroom \"call of nature\"", avatar: 4 }
+        ]
+    },
+    {
+        text: "Roshan claims he plays the guitar. What’s the real story?",
+        options: [
+            { text: "The guitar case is just a stylish room accessory.", avatar: 1 },
+            { text: "He only opens it to show guests he “has one.”", avatar: 2 },
+            { text: "He strums it once a year—on his birthday.", avatar: 2 },
+            { text: "He Googles \"how to tune a guitar\" every time.", avatar: 3 },
+            { text: "He uses it as a stand for his beard grooming products.", avatar: 0 }
+        ]
+    },
+    {
+        text: "What’s Roshan’s secret to high energy in the mornings?",
+        options: [
+            { text: "Dancing while brushing his teeth.", avatar: 3 },
+            { text: "Loudly playing sports channel", avatar: 3 },
+            { text: "Making breakfast ..eggs and bacon", avatar: 2 },
+            { text: "Giving his beard a pep talk in the mirror.", avatar: 0 },
+            { text: "Waking up Twitty with a bad joke.", avatar: 3 }
+        ]
+    },
+    {
+        text: "Roshan is at a family function. What’s he most likely to be caught doing?",
+        options: [
+            { text: "Talking about stocks to cousins", avatar: 3 },
+            { text: "Discussing why Massachusetts is overpriced.", avatar: 1 },
+            { text: "Showing off his latest beard style to cousins.", avatar: 0 },
+            { text: "Taking group selfies", avatar: 3 },
+            { text: "Again …In the bathroom \"call of nature\"", avatar: 4 }
+        ]
+    },
+    {
+        text: "What’s Roshan’s idea of a perfect Sunday morning?",
+        options: [
+            { text: "Planning a trip with cousins which will never happen", avatar: 2 },
+            { text: "Experimenting with a new beard oil.", avatar: 0 },
+            { text: "Planning his outfit for the week.", avatar: 1 },
+            { text: "Calling friends to plan golf", avatar: 3 },
+            { text: "Ordering Middle Eastern food for breakfast.", avatar: 0 }
+        ]
+    },
+    {
+        text: "If Roshan were a superhero, what would his superpower be?",
+        options: [
+            { text: "The ability to fall asleep anywhere, anytime.", avatar: 2 },
+            { text: "Instantly growing the perfect beard and mustache.", avatar: 0 },
+            { text: "Turning any food into Middle Eastern cuisine (no coconut allowed).", avatar: 0 },
+            { text: "Making everyone laugh with his jokes—even at work.", avatar: 3 },
+            { text: "Magically delaying time so he’s never actually late.", avatar: 2 }
+        ]
+    },
+    {
+        text: "What’s Roshan’s signature travel style?",
+        options: [
+            { text: "Asking, \"Wait, where are we going again?\" on the morning of the trip.", avatar: 2 },
+            { text: "Packing his beard kit but forgetting socks.", avatar: 0 },
+            { text: "Sleeping through half the journey.", avatar: 2 },
+            { text: "Taking selfies at every stop for maximum bragging rights.", avatar: 3 },
+            { text: "Coming back and telling his cousins he planned the whole adventure.", avatar: 3 }
+        ]
+    }
+];
+        ]
+    },
+    {
+        text: "What kind of projects excite you?",
+        options: [
+            { text: "Data analysis and AI", avatar: 0 },
+            { text: "Web apps and SPAs", avatar: 1 },
+            { text: "Enterprise software", avatar: 2 },
+            { text: "Games and engines", avatar: 3 },
+            { text: "Web frameworks", avatar: 4 },
+            { text: "Cloud services", avatar: 5 },
+            { text: "iOS apps", avatar: 6 },
+            { text: "Systems tools", avatar: 7 }
+        ]
+    },
+    {
+        text: "How do you feel about syntax?",
+        options: [
+            { text: "Indentation-based, clean", avatar: 0 },
+            { text: "Flexible, curly braces", avatar: 1 },
+            { text: "Verbose but clear", avatar: 2 },
+            { text: "C-style with power", avatar: 3 },
+            { text: "Elegant and readable", avatar: 4 },
+            { text: "Minimalist", avatar: 5 },
+            { text: "Modern and safe", avatar: 6 },
+            { text: "Expressive with macros", avatar: 7 }
+        ]
+    },
+    {
+        text: "What's your memory management style?",
+        options: [
+            { text: "Garbage collected", avatar: 0 },
+            { text: "Garbage collected", avatar: 1 },
+            { text: "Garbage collected", avatar: 2 },
+            { text: "Manual", avatar: 3 },
+            { text: "Garbage collected", avatar: 4 },
+            { text: "Garbage collected", avatar: 5 },
+            { text: "ARC", avatar: 6 },
+            { text: "Ownership and borrowing", avatar: 7 }
+        ]
+    },
+    {
+        text: "How do you deploy your code?",
+        options: [
+            { text: "Jupyter notebooks", avatar: 0 },
+            { text: "NPM and bundlers", avatar: 1 },
+            { text: "JAR files", avatar: 2 },
+            { text: "Compiled binaries", avatar: 3 },
+            { text: "Heroku or Rails deploy", avatar: 4 },
+            { text: "Docker containers", avatar: 5 },
+            { text: "App Store", avatar: 6 },
+            { text: "Cargo build", avatar: 7 }
+        ]
+    },
+    {
+        text: "What's your philosophy on coding?",
+        options: [
+            { text: "There's only one way to do it", avatar: 0 },
+            { text: "There are many ways", avatar: 1 },
+            { text: "Write once, run anywhere", avatar: 2 },
+            { text: "Power and control", avatar: 3 },
+            { text: "Convention over configuration", avatar: 4 },
+            { text: "Simplicity and efficiency", avatar: 5 },
+            { text: "Safety and modernity", avatar: 6 },
+            { text: "Fearless concurrency", avatar: 7 }
+        ]
+    }
+];
+
+// ═══════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════
+let current = 0;
+let scores = new Array(5).fill(0);
+let userName = '';
+let userPhotoData = null;
+let currentResultId = localStorage.getItem('quiz_result_id') || null;
+
+// ═══════════════════════════════════════════════════════════════
+//  FIREBASE
+// ═══════════════════════════════════════════════════════════════
+let db = null;
+let firebaseReady = false;
+
+function initFirebase() {
+    if (!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey === 'YOUR_API_KEY') return false;
+    try {
+        firebase.initializeApp(FIREBASE_CONFIG);
+        db = firebase.firestore();
+        firebaseReady = true;
+        return true;
+    } catch (e) {
+        console.error('Firebase init error:', e);
+        return false;
+    }
+}
+
+function resizeImage(file, maxPx = 150) {
+    return new Promise(resolve => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+            let w = img.width, h = img.height;
+            if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+            else       { w = Math.round(w * maxPx / h); h = maxPx; }
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            URL.revokeObjectURL(url);
+            resolve(canvas.toDataURL('image/jpeg', 0.8));
+        };
+        img.src = url;
+    });
+}
+
+async function saveResult(avatar) {
+    if (!firebaseReady) return null;
+    const status = document.getElementById('saveStatus');
+
+    try {
+        const doc = await db.collection('results').add({
+            name: userName,
+            photoData: userPhotoData || null,
+            avatarName: avatar.name,
+            avatarEmoji: avatar.emoji,
+            avatarDescription: avatar.description,
+            traits: avatar.traits,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        status.textContent = '✓ Result saved!';
+        status.className = 'save-status saved';
+        return doc.id;
+    } catch (e) {
+        console.error('Save error:', e);
+        status.textContent = 'Could not save — check Firebase config.';
+        status.className = 'save-status error';
+        return null;
+    }
+}
+
+async function loadResults() {
+    if (!firebaseReady) return null;
+    try {
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000));
+        const snap = await Promise.race([
+            db.collection('results').orderBy('timestamp', 'desc').get(),
+            timeout
+        ]);
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (e) {
+        console.error('Load error:', e);
+        return 'error';
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SCREENS
+// ═══════════════════════════════════════════════════════════════
+function showOnly(id) {
+    ['introScreen','profileScreen','quizScreen','resultScreen','wallScreen'].forEach(s => {
+        document.getElementById(s).style.display = 'none';
+    });
+    const el = document.getElementById(id);
+    el.style.display = 'block';
+    el.classList.remove('fade-in');
+    void el.offsetWidth;
+    el.classList.add('fade-in');
+}
+
+function goToIntro() {
+    document.getElementById('progressBar').style.width = '0%';
+    showOnly('introScreen');
+}
+
+function goToProfile() {
+    document.getElementById('progressBar').style.width = '0%';
+    showOnly('profileScreen');
+    document.getElementById('nameInput').focus();
+}
+
+function goToWall() {
+    document.getElementById('progressBar').style.width = '100%';
+    showOnly('wallScreen');
+    renderWall();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PROFILE
+// ═══════════════════════════════════════════════════════════════
+function handlePhotoSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    resizeImage(file).then(dataURL => {
+        userPhotoData = dataURL;
+        const preview = document.getElementById('photoPreview');
+        const area = document.getElementById('photoUploadArea');
+        preview.src = dataURL;
+        preview.style.display = 'block';
+        area.querySelector('.photo-placeholder').style.display = 'none';
+        area.querySelector('.photo-label').style.display = 'none';
+        area.classList.add('has-photo');
+    });
+}
+
+function beginQuiz() {
+    const input = document.getElementById('nameInput');
+    userName = input.value.trim();
+    if (!userName) {
+        input.focus();
+        input.style.borderColor = '#e32';
+        input.placeholder = 'Please enter your name!';
+        setTimeout(() => { input.style.borderColor = ''; input.placeholder = 'Your name'; }, 2000);
+        return;
+    }
+    current = 0;
+    scores = new Array(5).fill(0);
+    currentResultId = null;
+    showOnly('quizScreen');
+    renderQuestion();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  QUIZ
+// ═══════════════════════════════════════════════════════════════
+function renderQuestion() {
+    const q = QUESTIONS[current];
+    document.getElementById('questionMeta').textContent = `Question ${current + 1} of ${QUESTIONS.length}`;
+    document.getElementById('questionText').textContent = q.text;
+
+    const grid = document.getElementById('answersGrid');
+    grid.innerHTML = '';
+    const opts = [...q.options].sort(() => Math.random() - 0.5);
+    opts.forEach(opt => {
+        const card = document.createElement('div');
+        card.className = 'answer-card';
+        card.textContent = opt.text;
+        card.addEventListener('click', () => pick(card, opt.avatar, grid));
+        grid.appendChild(card);
+    });
+
+    document.getElementById('progressBar').style.width = (current / QUESTIONS.length * 100) + '%';
+
+    const qs = document.getElementById('quizScreen');
+    qs.classList.remove('fade-in');
+    void qs.offsetWidth;
+    qs.classList.add('fade-in');
+}
+
+function pick(card, avatarIdx, grid) {
+    grid.querySelectorAll('.answer-card').forEach(c => {
+        c.style.pointerEvents = 'none';
+        if (c !== card) c.classList.add('dimmed');
+    });
+    card.classList.add('selected');
+    scores[avatarIdx]++;
+
+    setTimeout(() => {
+        current++;
+        if (current < QUESTIONS.length) renderQuestion();
+        else showResult();
+    }, 450);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  RESULT
+// ═══════════════════════════════════════════════════════════════
+function showResult() {
+    const maxScore = Math.max(...scores);
+    const winner = AVATARS[scores.indexOf(maxScore)];
+
+    document.getElementById('resultEmoji').textContent = winner.emoji;
+    document.getElementById('resultName').textContent = winner.name;
+    document.getElementById('resultDesc').textContent = winner.description;
+    document.getElementById('resultTraits').innerHTML = winner.traits.map(t =>
+        `<span class="trait-chip">${t}</span>`
+    ).join('');
+
+    const status = document.getElementById('saveStatus');
+    if (firebaseReady) {
+        status.textContent = 'Saving your result...';
+        status.className = 'save-status';
+    } else {
+        status.textContent = '';
+    }
+
+    document.getElementById('progressBar').style.width = '100%';
+    showOnly('resultScreen');
+    launchConfetti();
+
+    saveResult(winner).then(id => {
+        if (id) {
+            currentResultId = id;
+            localStorage.setItem('quiz_result_id', id);
+        }
+    });
+}
+
+function retake() {
+    current = 0;
+    scores = new Array(5).fill(0);
+    currentResultId = null;
+    localStorage.removeItem('quiz_result_id');
+    userPhotoData = null;
+    document.getElementById('photoPreview').style.display = 'none';
+    document.getElementById('photoPreview').src = '';
+    document.getElementById('photoUploadArea').classList.remove('has-photo');
+    document.getElementById('photoUploadArea').querySelector('.photo-placeholder').style.display = '';
+    document.getElementById('photoUploadArea').querySelector('.photo-label').style.display = '';
+    document.getElementById('nameInput').value = '';
+    goToProfile();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  WALL
+// ═══════════════════════════════════════════════════════════════
+async function renderWall() {
+    const grid = document.getElementById('wallGrid');
+    const notice = document.getElementById('firebaseNotice');
+    grid.innerHTML = '<div class="wall-loading">Loading results...</div>';
+
+    if (!firebaseReady) {
+        notice.innerHTML = `
+            <div class="setup-notice">
+                <strong>⚙️ Firebase not configured yet.</strong><br>
+                To enable the results wall, fill in your Firebase config in the script section of <code>index.html</code>.
+                Create a free project at <strong>console.firebase.google.com</strong>, enable Firestore + Storage in test mode, then paste your config.
+            </div>`;
+        grid.innerHTML = '<div class="wall-empty">Results will appear here once Firebase is set up 🔧</div>';
+        return;
+    }
+
+    notice.innerHTML = '';
+    const results = await loadResults();
+
+    if (results === 'error') {
+        grid.innerHTML = `<div class="wall-empty">
+            ⚠️ Couldn't connect to Firestore.<br><br>
+            <small style="color:#bbb">Make sure the Firestore database is created in the Firebase console (Build → Firestore Database → Create database → Test mode), then refresh.</small>
+        </div>`;
+        return;
+    }
+
+    if (!results || results.length === 0) {
+        grid.innerHTML = '<div class="wall-empty">No results yet — be the first! 🎉</div>';
+        return;
+    }
+
+    grid.innerHTML = '';
+    results.forEach(r => {
+        const isMe = r.id === currentResultId;
+        const card = document.createElement('div');
+        card.className = 'wall-card' + (isMe ? ' mine' : '');
+
+        const photoHTML = r.photoData
+            ? `<img src="${r.photoData}" alt="${r.name}" />`
+            : r.avatarEmoji;
+
+        card.innerHTML = `
+            <div class="wall-photo">${photoHTML}</div>
+            <div class="wall-person-name">${escapeHTML(r.name)}</div>
+            <div class="wall-avatar-name">${r.avatarEmoji} ${r.avatarName}</div>
+            <div class="traits-row">
+                ${(r.traits || []).map(t => `<span class="trait-chip">${escapeHTML(t)}</span>`).join('')}
+            </div>
+            ${isMe ? `<button class="delete-btn" onclick="deleteResult('${r.id}')">↺ Redo mine</button>` : ''}`;
+        grid.appendChild(card);
+    });
+}
+
+async function deleteResult(docId) {
+    if (!firebaseReady) return;
+    const btn = document.querySelector('.delete-btn');
+    if (btn) btn.textContent = 'Deleting...';
+    try {
+        await db.collection('results').doc(docId).delete();
+        currentResultId = null;
+        localStorage.removeItem('quiz_result_id');
+        retake();
+    } catch (e) {
+        console.error('Delete error:', e);
+        if (btn) btn.textContent = '↺ Redo mine';
+        alert('Could not delete — check Firestore rules allow delete. Go to Firebase Console → Firestore → Rules and make sure "allow read, write" is set.');
+    }
+}
+
+function escapeHTML(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CONFETTI
+// ═══════════════════════════════════════════════════════════════
+function launchConfetti() {
+    const wrap = document.getElementById('confettiWrap');
+    wrap.innerHTML = '';
+    const colors = ['#e32','#ffd93d','#6bcb77','#4d96ff','#ff6b6b','#c77dff','#ff9f1c','#06d6a0'];
+    for (let i = 0; i < 100; i++) {
+        const el = document.createElement('div');
+        el.className = 'dot';
+        const size = Math.random() * 9 + 5;
+        el.style.cssText = `
+            left:${Math.random()*100}vw;
+            width:${size}px; height:${size}px;
+            background:${colors[Math.floor(Math.random()*colors.length)]};
+            border-radius:${Math.random()>.5?'50%':'2px'};
+            animation-duration:${Math.random()*2+1.5}s;
+            animation-delay:${Math.random()*1.2}s;`;
+        wrap.appendChild(el);
+    }
+    setTimeout(() => wrap.innerHTML = '', 5000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════
+initFirebase();
+</script>
+</body>
+</html>
