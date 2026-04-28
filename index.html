@@ -474,7 +474,7 @@
 
     <!-- INTRO -->
     <div class="intro-screen fade-in" id="introScreen">
-        <img src="roshan pic.png" alt="Roshangers landing image" class="hero-image" />
+        <img src="avengers.png" alt="Avengers picture" class="hero-image" />
         <h1>Which Roshanger Are You?</h1>
         <p>Discover your Roshanger side! Answer 9 questions to find out.</p>
         <button class="btn-primary" onclick="goToProfile()">Let's Go!</button>
@@ -964,10 +964,12 @@ async function renderWall() {
     const results = await loadResults();
 
     if (results === 'error') {
-        grid.innerHTML = `<div class="wall-empty">
-            ⚠️ Couldn't connect to Firestore.<br><br>
-            <small style="color:#bbb">Make sure the Firestore database is created in the Firebase console (Build → Firestore Database → Create database → Test mode), then refresh.</small>
-        </div>`;
+        notice.innerHTML = `
+            <div class="setup-notice">
+                <strong>⚠️ Firestore connection failed.</strong><br>
+                Sample Roshangers results are shown while you fix the setup.
+            </div>`;
+        renderWallCards(SAMPLE_RESULTS);
         return;
     }
 
